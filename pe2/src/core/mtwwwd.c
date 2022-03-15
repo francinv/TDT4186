@@ -5,7 +5,7 @@
 #include <netinet/in.h>
 #include <fcntl.h>
 
-#define PORT 8000
+#define PORT 6789
 #define MAXREQ (4096*10124)
 
 char buffer[MAXREQ], body[MAXREQ], msg[MAXREQ];
@@ -93,4 +93,5 @@ void initalize_server() {
 
 int main(int argc, char* argv[]) {
     initalize_server();
+    printf("Server running at port: 6789");
 }
