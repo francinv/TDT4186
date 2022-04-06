@@ -236,15 +236,14 @@ void execute_pipeline(char **args)
 
 /**
  * @brief main method, 
- * terminates process on 0x04 (control-d) 
+ * check if sig is 0x04 (control-d), if so terminate process
  */
-int main(int argc, char *argv[]) 
-{
+int main(int argc, char *argv[]) {
     char **args;
     char *input;
     int status;
-
-    while (1) 
+    
+    do
     {
         print_current_dir();
         scanf("%[^\n]", input);
@@ -252,6 +251,7 @@ int main(int argc, char *argv[])
         {
             printf("\n");
             exit(EXIT_SUCCESS);
+            print_exit_status(status, args);
         }
         if (strcmp(input, "") == 0) 
         {
@@ -267,6 +267,7 @@ int main(int argc, char *argv[])
         else if (strcmp(args[0], "exit") == 0) 
         {
             exit(EXIT_SUCCESS);
+            print_exit_status(status, args);
         }
         else if (strcmp(args[0], "jobs") == 0) 
         {
@@ -280,6 +281,7 @@ int main(int argc, char *argv[])
         {
             execute_command(args);
         }
-    }
+    } while (input[0] != CONTROL_D);
+    print_exit_status(status, args);
     return 0;
 }
