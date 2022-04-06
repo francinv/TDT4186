@@ -7,7 +7,6 @@
 #include <stdbool.h>
 
 #define SIZE_OF(x) (sizeof(x) / sizeof(x[0]))
-#define MAXSIZE 200
 
 typedef struct node node;
 
@@ -16,10 +15,12 @@ struct node *current;
 
 void printList();
 
-void insertFirst(int key, pid_t pid, char args[MAXSIZE]);
+void insertFirst(int key, pid_t pid, char **args);
 
 bool isEmpty();
 
 int length();
+
+#define SIZE_OF(x) (sizeof(x) / sizeof(x[0]))
 
 #endif

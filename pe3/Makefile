@@ -5,7 +5,7 @@ TARGET=flush
 
 all: #target main
 	$(CC) src/core/flush.c src/core/linkedlist.c -o $(TARGET)
-	./$ (TARGET)
+	./$(TARGET)
 
 compile: 
 	$(CC) src/core/flush.c src/core/linkedlist.c -o $(TARGET)

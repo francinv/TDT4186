@@ -10,7 +10,7 @@
 struct node {
    int key;
    pid_t pid;
-   char args[MAXSIZE];
+   char **args;
    struct node *next;
 };
 
@@ -24,7 +24,11 @@ void printList() {
 	
    //start from the beginning
    while(ptr != NULL) {
-      printf("(%d,%s) ",ptr->pid,ptr->args);
+      printf("(%d) ", ptr->pid);
+      //print args
+      for (int i = 0; i < SIZE_OF(ptr->args); i++) {
+         printf("%s ", ptr->args[i]);
+      }
       ptr = ptr->next;
    }
 	
@@ -32,13 +36,13 @@ void printList() {
 }
 
 //insert link at the first location
-void insertFirst(int key, pid_t pid, char args[MAXSIZE]) {
+void insertFirst(int key, pid_t pid, char **args) {
    //create a link
    struct node *link = (struct node*) malloc(sizeof(struct node));
 	
    link->key = key;
    link->pid = pid;
-   link->args[0] = args;
+   link->args = args;
 	
    //point it to old first node
    link->next = head;
