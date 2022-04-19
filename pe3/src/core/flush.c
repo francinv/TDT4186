@@ -244,10 +244,13 @@ int main(int argc, char *argv[])
         print_current_dir();
         fgets(str, KILOBYTE, stdin);
 
+        str[strlen(str) - 1] = '\0';
+        split_string(str, args);
         if (str[0] == CONTROL_D) 
         {
             exit(EXIT_SUCCESS);
         } 
+        
         else if (strcmp(args[0], "cd") == 0)
         {
             change_dir(args[1]);
@@ -262,7 +265,6 @@ int main(int argc, char *argv[])
         } 
         else 
         {
-            split_string(str, args);
             execute_command(args);
         }
 

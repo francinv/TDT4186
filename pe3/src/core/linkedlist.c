@@ -32,7 +32,7 @@ void printList() {
       ptr = ptr->next;
    }
 	
-   printf(" ]");
+   printf(" ]\n");
 }
 
 //insert link at the first location
