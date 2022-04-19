@@ -6,18 +6,15 @@
  * @version 0.1
  * @date 2022-03-28
  * 
- * @copyright Copyright (c) 2022
- * 
  */
 
 #include "../../include/core/flush.h"
 
 #define KILOBYTE 1024
 #define CONTROL_D 0x04
-#define TAB 0x09
 
 /**
- * @brief prompts the user for input by printing the current working directory followed by a colon (:) character.
+ * @brief print current working directory
  * 
  */
 void print_current_dir(void)
@@ -108,7 +105,6 @@ void redirect_io(char **args)
     }
 }
 
-
 /**
  * @brief checks for backround process, by checking if 
  * inputs last letter is  "&"
@@ -122,24 +118,6 @@ int check_background(char **args)
     }
     return 0;
 }
-
-
-/**
- * @brief function for finding pipe
- */
-int find_pipe(char **args) 
-{
-    int i;
-    for (i = 0; args[i] != NULL; i++) 
-    {
-        if (strcmp(args[i], "|") == 0) 
-        {
-            return i;
-        }
-    }
-    return -1;
-}
-
 
 /**
  * @brief Implement the command line parsing, create a new process (using fork(2)) 
@@ -192,6 +170,22 @@ void execute_command(char **args)
 }
 
 /**
+ * @brief function for finding pipe
+ */
+int find_pipe(char **args) 
+{
+    int i;
+    for (i = 0; args[i] != NULL; i++) 
+    {
+        if (strcmp(args[i], "|") == 0) 
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
+/**
  * @brief execute pipeline args
  * 
  */
@@ -234,40 +228,29 @@ void execute_pipeline(char **args)
     }
 }
 
+
 /**
- * @brief main method, 
- * check if sig is 0x04 (control-d), if so terminate process
+ * @brief main method for the terminal. Terminate process on 0x04 (control-d)
+ * 
  */
-int main(int argc, char *argv[]) {
-    char **args;
-    char *input;
+int main(int argc, char *argv[])
+{
+    char *args[KILOBYTE];
+    char str[KILOBYTE];
     int status;
-    
-    do
+
+    while (1) 
     {
         print_current_dir();
-        scanf("%[^\n]", input);
-        if (input == NULL) 
-        {
-            printf("\n");
-            exit(EXIT_SUCCESS);
-            print_exit_status(status, args);
-        }
-        if (strcmp(input, "") == 0) 
-        {
-            continue;
-        }
+        fgets(str, KILOBYTE, stdin);
 
-        split_string(input, args);
-      
-        if (strcmp(args[0], "cd") == 0) 
+        if (str[0] == CONTROL_D) 
+        {
+            exit(EXIT_SUCCESS);
+        } 
+        else if (strcmp(args[0], "cd") == 0)
         {
             change_dir(args[1]);
-        }
-        else if (strcmp(args[0], "exit") == 0) 
-        {
-            exit(EXIT_SUCCESS);
-            print_exit_status(status, args);
         }
         else if (strcmp(args[0], "jobs") == 0) 
         {
@@ -279,9 +262,11 @@ int main(int argc, char *argv[]) {
         } 
         else 
         {
+            split_string(str, args);
             execute_command(args);
         }
-    } while (input[0] != CONTROL_D);
-    print_exit_status(status, args);
+
+    }
     return 0;
 }
+        
